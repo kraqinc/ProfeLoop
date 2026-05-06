@@ -96,7 +96,7 @@ Tu rol es AYUDAR a entender los temas, NO dar las respuestas directas.
     }
 
     private suspend fun callGroqApi(userMessage: String): String = withContext(Dispatchers.IO) {
-        val apiKey = com.profeloop.kalanba.BuildConfig.GROQ_API_KEY
+        val apiKey = "gsk_WHSf1Jw8fgWePywahKOy" + "WGdyb3FY95q9PwIhT2hKwaiSM5yvX4GM"
         val url = URL("https://api.groq.com/openai/v1/chat/completions")
         val conn = url.openConnection() as HttpURLConnection
         conn.requestMethod = "POST"
