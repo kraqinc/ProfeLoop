@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TareaApp"
+rootProject.name = "ProfeLoop"
 include ':app'
