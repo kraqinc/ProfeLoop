@@ -20,7 +20,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
@@ -29,7 +28,7 @@ jobs:
         run: |
           mkdir -p gradle/wrapper
           curl -L -o gradle/wrapper/gradle-wrapper.jar \
-            "https://raw.githubusercontent.com/gradle/gradle/v8.2.1/gradle/wrapper/gradle-wrapper.jar"
+            "https://github.com/gradle/gradle/raw/v8.2.1/gradle/wrapper/gradle-wrapper.jar"
 
       - name: Write google-services.json
         env:
@@ -50,10 +49,20 @@ jobs:
           path: app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
 
-      - name: Upload build reports on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
+      - name: Create Release with APK
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v2
         with:
-          name: build-reports
-          path: app/build/reports/
-          retention-days: 7
+          tag_name: v${{ github.run_number }}
+          name: "TareaApp v${{ github.run_number }}"
+          body: |
+            ## 📱 TareaApp - App de Tareas Escolares
+            
+            Descarga el APK e instálalo en tu Android.
+            
+            > Activa "Instalar de fuentes desconocidas" en Ajustes si es necesario.
+          files: app/build/outputs/apk/debug/app-debug.apk
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
