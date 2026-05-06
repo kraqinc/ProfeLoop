@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TareaApp"
+        android:theme="@style/Theme.ProfeLoop"
         android:usesCleartextTraffic="false">
 
         <!-- Main Activity -->
@@ -39,6 +39,13 @@
             android:name=".auth.RegisterActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+        <!-- AI Assistant Activity -->
+        <activity
+            android:name=".ai.AiAssistantActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".MainActivity" />
 
         <!-- Task Activities -->
         <activity
@@ -65,7 +72,7 @@
         <!-- FCM Default Notification Channel -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="tareaapp_channel" />
+            android:value="profeloop_channel" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification" />
