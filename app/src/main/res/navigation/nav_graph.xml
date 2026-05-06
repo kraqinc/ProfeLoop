@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <!-- Home -->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.tareaapp.home.HomeFragment"
+        android:label="Inicio"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_homeFragment_to_subjectListFragment"
+            app:destination="@id/subjectListFragment" />
+    </fragment>
+
+    <!-- Subject List -->
+    <fragment
+        android:id="@+id/subjectListFragment"
+        android:name="com.tareaapp.subjects.SubjectListFragment"
+        android:label="Asignaturas"
+        tools:layout="@layout/fragment_subject_list">
+
+        <argument
+            android:name="extra_grado"
+            app:argType="integer"
+            android:defaultValue="8" />
+
+        <action
+            android:id="@+id/action_subjectListFragment_to_taskListFragment"
+            app:destination="@id/taskListFragment" />
+    </fragment>
+
+    <!-- Task List -->
+    <fragment
+        android:id="@+id/taskListFragment"
+        android:name="com.tareaapp.tasks.TaskListFragment"
+        android:label="Tareas"
+        tools:layout="@layout/fragment_task_list">
+
+        <argument
+            android:name="extra_grado"
+            app:argType="integer"
+            android:defaultValue="8" />
+        <argument
+            android:name="extra_asignatura"
+            app:argType="string"
+            android:defaultValue="" />
+        <argument
+            android:name="extra_periodo"
+            app:argType="integer"
+            android:defaultValue="1" />
+    </fragment>
+
+    <!-- Notifications (Bottom Nav) -->
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.tareaapp.notifications.NotificationsFragment"
+        android:label="Notificaciones"
+        tools:layout="@layout/fragment_notifications" />
+
+    <!-- Profile (Bottom Nav) -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.tareaapp.profile.ProfileFragment"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_profile" />
+
+</navigation>
