@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.TareaApp" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.ProfeLoop" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color -->
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
@@ -34,19 +34,19 @@
         <item name="android:windowLightStatusBar">false</item>
 
         <!-- Action bar -->
-        <item name="actionBarTheme">@style/ThemeOverlay.TareaApp.ActionBar</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.ProfeLoop.ActionBar</item>
     </style>
 
-    <style name="ThemeOverlay.TareaApp.ActionBar" parent="ThemeOverlay.Material3.ActionBar">
+    <style name="ThemeOverlay.ProfeLoop.ActionBar" parent="ThemeOverlay.Material3.ActionBar">
         <item name="colorControlNormal">@color/md_theme_onPrimary</item>
         <item name="android:textColorPrimary">@color/md_theme_onPrimary</item>
     </style>
 
     <!-- Splash / Launch screen -->
-    <style name="Theme.TareaApp.Splash" parent="Theme.SplashScreen">
+    <style name="Theme.ProfeLoop.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/md_theme_primary</item>
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
-        <item name="postSplashScreenTheme">@style/Theme.TareaApp</item>
+        <item name="postSplashScreenTheme">@style/Theme.ProfeLoop</item>
     </style>
 
 </resources>
