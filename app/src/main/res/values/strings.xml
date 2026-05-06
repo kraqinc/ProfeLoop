@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TareaApp</string>
+    <string name="app_name">ProfeLoop</string>
     <string name="app_subtitle">I.E. Del Pinar</string>
 
     <!-- Auth -->
     <string name="hint_email">Correo electrónico</string>
     <string name="hint_password">Contraseña</string>
     <string name="btn_login">Iniciar Sesión</string>
+    <string name="btn_google_sign_in">Iniciar sesión con Google</string>
     <string name="btn_register">Crear Cuenta</string>
     <string name="link_register">¿No tienes cuenta? Regístrate aquí</string>
     <string name="link_login">¿Ya tienes cuenta? Inicia sesión</string>
@@ -45,7 +46,7 @@
     <string name="already_teacher">Ya hay un/a profesor/a en esta asignatura</string>
 
     <!-- Notifications -->
-    <string name="notif_channel_name">TareaApp Notificaciones</string>
+    <string name="notif_channel_name">ProfeLoop Notificaciones</string>
     <string name="notif_tarea_enviada_title">Nueva entrega recibida</string>
     <string name="notif_revisando_title">Tu tarea está siendo revisada</string>
     <string name="notif_calificada_title">¡Tu tarea fue calificada!</string>
