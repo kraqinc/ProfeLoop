@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material 3 Color Scheme - School Purple/Blue Theme -->
+    <color name="md_theme_primary">#5C6BC0</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#E8EAF6</color>
+    <color name="md_theme_onPrimaryContainer">#1A237E</color>
+
+    <color name="md_theme_secondary">#7C4DFF</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#EDE7F6</color>
+    <color name="md_theme_onSecondaryContainer">#311B92</color>
+
+    <color name="md_theme_tertiary">#00BCD4</color>
+    <color name="md_theme_onTertiary">#FFFFFF</color>
+    <color name="md_theme_tertiaryContainer">#E0F7FA</color>
+    <color name="md_theme_onTertiaryContainer">#006064</color>
+
+    <color name="md_theme_error">#F44336</color>
+    <color name="md_theme_onError">#FFFFFF</color>
+    <color name="md_theme_errorContainer">#FFEBEE</color>
+    <color name="md_theme_onErrorContainer">#B71C1C</color>
+
+    <color name="md_theme_background">#F5F5F5</color>
+    <color name="md_theme_onBackground">#212121</color>
+
+    <color name="md_theme_surface">#FFFFFF</color>
+    <color name="md_theme_onSurface">#212121</color>
+    <color name="md_theme_surfaceVariant">#EEEEEE</color>
+    <color name="md_theme_onSurfaceVariant">#757575</color>
+
+    <color name="md_theme_outline">#9E9E9E</color>
+    <color name="md_theme_outlineVariant">#E0E0E0</color>
+
+    <!-- Grade Colors -->
+    <color name="grade_1">#FF6B6B</color>
+    <color name="grade_2">#FF8E53</color>
+    <color name="grade_3">#FFC947</color>
+    <color name="grade_4">#47D16C</color>
+    <color name="grade_5">#4ECDC4</color>
+    <color name="grade_6">#45B7D1</color>
+    <color name="grade_7">#5C6BC0</color>
+    <color name="grade_8">#AB47BC</color>
+    <color name="grade_9">#EC407A</color>
+
+    <!-- Status Colors -->
+    <color name="status_enviada">#2196F3</color>
+    <color name="status_revisando">#FF9800</color>
+    <color name="status_calificada">#4CAF50</color>
+
+    <!-- Bottom Nav -->
+    <color name="bottom_nav_selected">@color/md_theme_primary</color>
+    <color name="bottom_nav_unselected">@color/md_theme_onSurfaceVariant</color>
+</resources>
