@@ -2,51 +2,43 @@ package com.profeloop.kalanba.subjects
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.profeloop.kalanba.databinding.ItemSubjectBinding
-import com.profeloop.kalanba.models.User
-
-data class SubjectItem(
-    val nombre: String,
-    val profesorNombre: String,
-    val tieneProfesor: Boolean,
-    val emoji: String
-)
+import com.profeloop.kalanba.utils.Constants
 
 class SubjectAdapter(
-    private val grado: Int,
-    private val currentUser: User?,
-    private val onSubjectClick: (String) -> Unit
-) : ListAdapter<SubjectItem, SubjectAdapter.ViewHolder>(DIFF_CALLBACK) {
+    private var items: List<Pair<String, String?>>,
+    private val onClick: (String) -> Unit
+) : RecyclerView.Adapter<SubjectAdapter.ViewHolder>() {
 
-    companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<SubjectItem>() {
-            override fun areItemsTheSame(a: SubjectItem, b: SubjectItem) = a.nombre == b.nombre
-            override fun areContentsTheSame(a: SubjectItem, b: SubjectItem) = a == b
-        }
+    fun updateData(newItems: List<Pair<String, String?>>) {
+        items = newItems
+        notifyDataSetChanged()
     }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemSubjectBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+        return ViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(items[position])
+    }
+
+    override fun getItemCount() = items.size
 
     inner class ViewHolder(private val binding: ItemSubjectBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: SubjectItem) {
-            binding.tvEmoji.text          = item.emoji
-            binding.tvSubjectName.text    = item.nombre
-            binding.tvProfesorName.text   = if (item.tieneProfesor) {
-                "Prof. ${item.profesorNombre}"
-            } else {
-                "Sin profesor asignado"
-            }
-            binding.root.setOnClickListener { onSubjectClick(item.nombre) }
+
+        fun bind(item: Pair<String, String?>) {
+            val (subject, teacher) = item
+            val emoji = Constants.SUBJECT_EMOJIS[subject] ?: "📚"
+            binding.tvEmoji.text = emoji
+            binding.tvSubjectName.text = subject
+            binding.tvTeacher.text = if (teacher != null) "Profesor: $teacher" else "Sin profesor asignado"
+            binding.root.setOnClickListener { onClick(subject) }
         }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        ItemSubjectBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    )
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
     }
 }
