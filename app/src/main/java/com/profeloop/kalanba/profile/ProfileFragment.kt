@@ -8,10 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.profeloop.kalanba.auth.LoginActivity
+import com.profeloop.kalanba.ai.AiAssistantActivity
 import com.profeloop.kalanba.databinding.FragmentProfileBinding
 import com.profeloop.kalanba.utils.FirebaseUtils
-import com.profeloop.kalanba.utils.gone
-import com.profeloop.kalanba.utils.visible
 import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
@@ -20,7 +19,8 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
@@ -29,39 +29,32 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadProfile()
 
-        binding.btnCerrarSesion.setOnClickListener {
+        binding.btnLogout.setOnClickListener {
             FirebaseUtils.auth.signOut()
-            startActivity(Intent(requireContext(), LoginActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            })
-            requireActivity().finish()
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
+
+        binding.btnAiAssistant.setOnClickListener {
+            startActivity(Intent(requireContext(), AiAssistantActivity::class.java))
+        }
+
+        loadProfile()
     }
 
     private fun loadProfile() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            binding.progressBar.visible()
-            val uid  = FirebaseUtils.currentUid ?: return@launch
-            val user = FirebaseUtils.getUserProfile(uid)
-            binding.progressBar.gone()
-
-            if (user != null) {
-                binding.tvNombre.text     = user.nombreCompleto()
-                binding.tvEmail.text      = user.email
-                binding.tvRol.text        = if (user.esProfesor()) "Profesor/a" else "Estudiante"
-                binding.tvGrado.text      = "Grado ${user.gradoStr()} · ${user.nivel.replaceFirstChar { it.uppercase() }}"
-                val asignaturasStr = if (user.asignaturas.isEmpty()) {
-                    "Sin asignaturas asignadas"
-                } else {
-                    user.asignaturas.joinToString(", ")
-                }
-                binding.tvAsignaturas.text = asignaturasStr
-
-                val avatar = if (user.esProfesor()) "👨‍🏫" else "🎒"
-                binding.tvAvatar.text = avatar
-            }
+        val uid = FirebaseUtils.currentUid ?: return
+        lifecycleScope.launch {
+            val user = FirebaseUtils.getUserProfile(uid) ?: return@launch
+            binding.tvName.text = user.nombre
+            binding.tvEmail.text = user.email
+            binding.tvRol.text = if (user.rol == "profesor") "Profesor" else "Estudiante"
+            binding.tvNivel.text = if (user.nivel == "primaria") "Primaria" else "Bachillerato"
+            binding.tvGrado.text = "Grado ${user.grado}"
+            val initial = user.nombre.firstOrNull()?.uppercaseChar()?.toString() ?: "?"
+            binding.tvAvatarInitial.text = initial
         }
     }
 
