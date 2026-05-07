@@ -1,50 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary brand colors -->
-    <color name="primary">#5C6BC0</color>
-    <color name="primary_dark">#3949AB</color>
-    <color name="primary_light">#9FA8DA</color>
-    <color name="secondary">#FF7043</color>
-    <color name="secondary_dark">#E64A19</color>
-    <color name="secondary_light">#FFAB91</color>
-
-    <!-- Neutrals -->
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
-    <color name="background">#F5F5F5</color>
-    <color name="surface">#FFFFFF</color>
-    <color name="on_surface">#212121</color>
-    <color name="divider">#BDBDBD</color>
-
-    <!-- Grade colors -->
-    <color name="grade_1">#EF5350</color>
-    <color name="grade_2">#EC407A</color>
-    <color name="grade_3">#AB47BC</color>
-    <color name="grade_4">#7E57C2</color>
-    <color name="grade_5">#5C6BC0</color>
-    <color name="grade_6">#42A5F5</color>
-    <color name="grade_7">#26A69A</color>
-    <color name="grade_8">#66BB6A</color>
-    <color name="grade_9">#FF7043</color>
-
-    <!-- Status colors -->
-    <color name="status_pending">#FFA726</color>
-    <color name="status_submitted">#42A5F5</color>
-    <color name="status_graded">#66BB6A</color>
-    <color name="status_late">#EF5350</color>
-
-    <!-- Urgency colors -->
-    <color name="urgency_green">#4CAF50</color>
-    <color name="urgency_yellow">#FFC107</color>
-    <color name="urgency_orange">#FF9800</color>
-    <color name="urgency_red">#F44336</color>
-
-    <!-- Bottom nav -->
-    <color name="bottom_nav_selected">#5C6BC0</color>
-    <color name="bottom_nav_unselected">#9E9E9E</color>
-
-    <!-- colorPrimary / colorAccent aliases for older themes -->
     <color name="colorPrimary">#5C6BC0</color>
     <color name="colorPrimaryDark">#3949AB</color>
-    <color name="colorAccent">#FF7043</color>
+    <color name="colorPrimaryLight">#9FA8DA</color>
+    <color name="colorSecondary">#FF7043</color>
+    <color name="colorBackground">#F0F2FF</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSurface">#212121</color>
+    <color name="colorOnSurfaceVariant">#757575</color>
+    <color name="colorDivider">#E0E0E0</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorError">#D32F2F</color>
+
+    <!-- Grade colors -->
+    <color name="grade1">#EF5350</color>
+    <color name="grade2">#EC407A</color>
+    <color name="grade3">#AB47BC</color>
+    <color name="grade4">#7E57C2</color>
+    <color name="grade5">#5C6BC0</color>
+    <color name="grade6">#42A5F5</color>
+    <color name="grade7">#26A69A</color>
+    <color name="grade8">#66BB6A</color>
+    <color name="grade9">#FF7043</color>
+
+    <!-- Status colors -->
+    <color name="statusPending">#FFA726</color>
+    <color name="statusSubmitted">#42A5F5</color>
+    <color name="statusGraded">#66BB6A</color>
+    <color name="statusLate">#EF5350</color>
+
+    <!-- Urgency colors -->
+    <color name="urgencyGreen">#4CAF50</color>
+    <color name="urgencyYellow">#FFC107</color>
+    <color name="urgencyOrange">#FF9800</color>
+    <color name="urgencyRed">#F44336</color>
+
+    <!-- Chat bubble -->
+    <color name="chatBubbleAssistant">#EEEEEE</color>
 </resources>
