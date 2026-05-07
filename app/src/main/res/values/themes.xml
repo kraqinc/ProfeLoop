@@ -1,52 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.ProfeLoop" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Primary brand color -->
-        <item name="colorPrimary">@color/md_theme_primary</item>
-        <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
-        <item name="colorPrimaryContainer">@color/md_theme_primaryContainer</item>
-        <item name="colorOnPrimaryContainer">@color/md_theme_onPrimaryContainer</item>
-
-        <!-- Secondary brand color -->
-        <item name="colorSecondary">@color/md_theme_secondary</item>
-        <item name="colorOnSecondary">@color/md_theme_onSecondary</item>
-        <item name="colorSecondaryContainer">@color/md_theme_secondaryContainer</item>
-        <item name="colorOnSecondaryContainer">@color/md_theme_onSecondaryContainer</item>
-
-        <!-- Tertiary brand color -->
-        <item name="colorTertiary">@color/md_theme_tertiary</item>
-        <item name="colorOnTertiary">@color/md_theme_onTertiary</item>
-
-        <!-- Error color -->
-        <item name="colorError">@color/md_theme_error</item>
-        <item name="colorOnError">@color/md_theme_onError</item>
-
-        <!-- Background / Surface -->
-        <item name="android:colorBackground">@color/md_theme_background</item>
-        <item name="colorSurface">@color/md_theme_surface</item>
-        <item name="colorOnSurface">@color/md_theme_onSurface</item>
-        <item name="colorOnSurfaceVariant">@color/md_theme_onSurfaceVariant</item>
-        <item name="colorOutline">@color/md_theme_outline</item>
-
-        <!-- Status bar -->
-        <item name="android:statusBarColor">@color/md_theme_primary</item>
-        <item name="android:windowLightStatusBar">false</item>
-
-        <!-- Action bar -->
-        <item name="actionBarTheme">@style/ThemeOverlay.ProfeLoop.ActionBar</item>
+    <style name="Theme.ProfeLoop" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_dark</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
     </style>
 
-    <style name="ThemeOverlay.ProfeLoop.ActionBar" parent="ThemeOverlay.Material3.ActionBar">
-        <item name="colorControlNormal">@color/md_theme_onPrimary</item>
-        <item name="android:textColorPrimary">@color/md_theme_onPrimary</item>
+    <style name="Theme.ProfeLoop.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_dark</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
     </style>
 
-    <!-- Splash / Launch screen -->
-    <style name="Theme.ProfeLoop.Splash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/md_theme_primary</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
-        <item name="postSplashScreenTheme">@style/Theme.ProfeLoop</item>
-    </style>
-
+    <style name="Theme.ProfeLoop.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.ProfeLoop.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
