@@ -1,256 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="@color/md_theme_background">
+    android:background="@color/colorBackground">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="24dp">
 
         <TextView
-            android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Crear Cuenta"
+            android:text="@string/register_title"
+            android:textColor="@color/colorPrimary"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="@color/md_theme_primary"
-            android:layout_marginTop="32dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/tvSubtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Regístrate en TareaApp"
-            android:textSize="14sp"
-            android:textColor="@color/md_theme_onSurfaceVariant"
-            android:layout_marginTop="4dp"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <!-- Rol Selector -->
-        <TextView
-            android:id="@+id/tvRolLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Soy:"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/md_theme_onSurface"
             android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginBottom="24dp" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroupRol"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:singleSelection="true"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@id/tvRolLabel"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipEstudiante"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🎒 Estudiante"
-                android:checked="true" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipProfesor"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="👨‍🏫 Profesor/a" />
-        </com.google.android.material.chip.ChipGroup>
-
-        <!-- Nombre -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilNombre"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
+            android:id="@+id/tilName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/chipGroupRol"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:layout_marginBottom="16dp"
+            android:hint="@string/name_hint"
+            app:boxStrokeColor="@color/colorPrimary">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etNombre"
+                android:id="@+id/etName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName|textCapWords"
-                android:imeOptions="actionNext" />
+                android:inputType="textPersonName|textCapWords" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Apellido -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilApellido"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Apellido"
-            android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@id/tilNombre"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etApellido"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName|textCapWords"
-                android:imeOptions="actionNext" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Nivel -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilNivel"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Nivel"
-            android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@id/tilApellido"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <AutoCompleteTextView
-                android:id="@+id/actvNivel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:inputType="none" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Grado -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilGrado"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Grado"
-            android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@id/tilNivel"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <AutoCompleteTextView
-                android:id="@+id/actvGrado"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:inputType="none" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Email -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilEmail"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_email"
-            android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@id/tilGrado"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:layout_marginBottom="16dp"
+            android:hint="@string/email_hint"
+            app:boxStrokeColor="@color/colorPrimary">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:imeOptions="actionNext" />
+                android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Password -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilPassword"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_password"
-            app:endIconMode="password_toggle"
-            android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@id/tilEmail"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:layout_marginBottom="16dp"
+            android:hint="@string/password_hint"
+            app:boxStrokeColor="@color/colorPrimary"
+            app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:imeOptions="actionNext" />
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Confirm Password -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilConfirmPassword"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Confirmar contraseña"
-            app:endIconMode="password_toggle"
-            android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@id/tilPassword"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:text="@string/rol_label"
+            android:textColor="@color/colorOnSurfaceVariant"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etConfirmPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:imeOptions="actionDone" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <Spinner
+            android:id="@+id/spinnerRol"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:padding="8dp" />
 
-        <!-- Register Button -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nivel_label"
+            android:textColor="@color/colorOnSurfaceVariant"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <Spinner
+            android:id="@+id/spinnerNivel"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:padding="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/grado_label"
+            android:textColor="@color/colorOnSurfaceVariant"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <Spinner
+            android:id="@+id/spinnerGrado"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="24dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:padding="8dp" />
+
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRegistrar"
-            style="@style/Widget.Material3.Button"
-            android:layout_width="0dp"
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Crear Cuenta"
-            android:textSize="16sp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/tilConfirmPassword"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:text="@string/btn_register"
+            android:textColor="@color/colorOnPrimary"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_marginBottom="24dp" />
 
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@id/btnRegistrar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/tvLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="¿Ya tienes cuenta? Inicia sesión"
-            android:textColor="@color/md_theme_primary"
-            android:textSize="14sp"
-            android:padding="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="32dp"
-            app:layout_constraintTop_toBottomOf="@id/progressBar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </ScrollView>
