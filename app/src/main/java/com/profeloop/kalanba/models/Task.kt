@@ -4,18 +4,13 @@ data class Task(
     val id: String = "",
     val titulo: String = "",
     val descripcion: String = "",
-    val asignatura: String = "",
-    val grado: Int = 0,
-    val periodo: Int = 0,           // 1-4
-    val profesorUid: String = "",
+    val profesorId: String = "",
     val profesorNombre: String = "",
+    val grado: Int = 0,
+    val asignatura: String = "",
+    val periodo: Int = 1,
     val archivoUrl: String = "",
     val archivoNombre: String = "",
-    val archivoTipo: String = "",   // "pdf", "docx", "xlsx"
     val fechaLimite: Long = 0L,
-    val createdAt: Long = System.currentTimeMillis(),
-    val activa: Boolean = true
-) {
-    fun gradoStr(): String = "$grado°"
-    fun periodoStr(): String = "Período $periodo"
-}
+    val fechaCreacion: Long = 0L
+)
