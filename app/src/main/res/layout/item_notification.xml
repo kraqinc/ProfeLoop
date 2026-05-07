@@ -4,56 +4,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginVertical="4dp"
+    android:layout_marginBottom="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp"
-    app:cardBackgroundColor="@color/colorSurface">
+    app:rippleColor="@color/md_theme_primaryContainer">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="12dp"
+        android:padding="16dp"
         android:gravity="center_vertical">
 
-        <ImageView
-            android:id="@+id/ivIcon"
+        <TextView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_notification"
-            android:layout_marginEnd="12dp"
-            android:contentDescription="@null" />
+            android:text="🔔"
+            android:textSize="22sp"
+            android:gravity="center" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
 
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorOnSurface"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                android:textColor="@color/md_theme_onSurface" />
 
             <TextView
                 android:id="@+id/tvMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorOnSurfaceVariant"
                 android:textSize="13sp"
-                android:layout_marginBottom="4dp" />
+                android:textColor="@color/md_theme_onSurfaceVariant"
+                android:layout_marginTop="2dp"
+                android:maxLines="2"
+                android:ellipsize="end" />
 
             <TextView
                 android:id="@+id/tvTime"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorOnSurfaceVariant"
-                android:textSize="11sp" />
+                android:textSize="11sp"
+                android:textColor="@color/md_theme_outline"
+                android:layout_marginTop="4dp" />
         </LinearLayout>
+
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
