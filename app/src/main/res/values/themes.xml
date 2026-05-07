@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.ProfeLoop" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryVariant">@color/primary_dark</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/secondary</item>
-        <item name="colorSecondaryVariant">@color/secondary_dark</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorSecondary</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="colorError">@color/colorError</item>
     </style>
 
     <style name="Theme.ProfeLoop.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryVariant">@color/primary_dark</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/secondary</item>
-        <item name="colorSecondaryVariant">@color/secondary_dark</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorSecondary</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="colorError">@color/colorError</item>
     </style>
 
     <style name="Theme.ProfeLoop.SplashScreen" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/primary</item>
+        <item name="windowSplashScreenBackground">@color/colorPrimary</item>
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
         <item name="postSplashScreenTheme">@style/Theme.ProfeLoop.NoActionBar</item>
     </style>
 
-    <style name="Theme.ProfeLoop.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="Theme.ProfeLoop.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="SectionHeaderText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorOnSurfaceVariant</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
 </resources>
