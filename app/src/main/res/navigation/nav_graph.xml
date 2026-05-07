@@ -5,46 +5,39 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
 
-    <!-- Home -->
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.profeloop.kalanba.home.HomeFragment"
-        android:label="Inicio"
+        android:label="ProfeLoop"
         tools:layout="@layout/fragment_home">
-
         <action
-            android:id="@+id/action_homeFragment_to_subjectListFragment"
+            android:id="@+id/action_home_to_subjectList"
             app:destination="@id/subjectListFragment" />
     </fragment>
 
-    <!-- Subject List -->
     <fragment
         android:id="@+id/subjectListFragment"
         android:name="com.profeloop.kalanba.subjects.SubjectListFragment"
-        android:label="Asignaturas"
+        android:label="Materias"
         tools:layout="@layout/fragment_subject_list">
-
         <argument
             android:name="extra_grado"
             app:argType="integer"
-            android:defaultValue="8" />
-
+            android:defaultValue="1" />
         <action
-            android:id="@+id/action_subjectListFragment_to_taskListFragment"
+            android:id="@+id/action_subjectList_to_taskList"
             app:destination="@id/taskListFragment" />
     </fragment>
 
-    <!-- Task List -->
     <fragment
         android:id="@+id/taskListFragment"
         android:name="com.profeloop.kalanba.tasks.TaskListFragment"
         android:label="Tareas"
         tools:layout="@layout/fragment_task_list">
-
         <argument
             android:name="extra_grado"
             app:argType="integer"
-            android:defaultValue="8" />
+            android:defaultValue="1" />
         <argument
             android:name="extra_asignatura"
             app:argType="string"
@@ -55,18 +48,16 @@
             android:defaultValue="1" />
     </fragment>
 
-    <!-- Notifications (Bottom Nav) -->
     <fragment
         android:id="@+id/notificationsFragment"
         android:name="com.profeloop.kalanba.notifications.NotificationsFragment"
         android:label="Notificaciones"
         tools:layout="@layout/fragment_notifications" />
 
-    <!-- Profile (Bottom Nav) -->
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.profeloop.kalanba.profile.ProfileFragment"
-        android:label="Perfil"
+        android:label="Mi perfil"
         tools:layout="@layout/fragment_profile" />
 
 </navigation>
