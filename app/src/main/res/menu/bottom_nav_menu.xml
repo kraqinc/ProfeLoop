@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/homeFragment"
-        android:icon="@drawable/ic_home"
-        android:title="@string/home_title" />
+        android:icon="@android:drawable/ic_menu_compass"
+        android:title="@string/nav_home" />
+
     <item
         android:id="@+id/notificationsFragment"
-        android:icon="@drawable/ic_notification"
-        android:title="@string/notifications_title" />
+        android:icon="@android:drawable/ic_dialog_alert"
+        android:title="@string/nav_notifications" />
+
     <item
         android:id="@+id/profileFragment"
-        android:icon="@drawable/ic_person"
-        android:title="@string/profile_title" />
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/nav_profile" />
+
 </menu>
