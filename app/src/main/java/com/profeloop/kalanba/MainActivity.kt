@@ -29,12 +29,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
+
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
         binding.bottomNav.setupWithNavController(navController)
-        setSupportActionBar(binding.toolbar)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             supportActionBar?.title = destination.label
