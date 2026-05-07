@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
+import com.profeloop.kalanba.R
 import com.profeloop.kalanba.databinding.FragmentSubjectListBinding
 import com.profeloop.kalanba.utils.Constants
 import com.profeloop.kalanba.utils.FirebaseUtils
@@ -19,10 +19,10 @@ class SubjectListFragment : Fragment() {
 
     private var _binding: FragmentSubjectListBinding? = null
     private val binding get() = _binding!!
-    private val args: SubjectListFragmentArgs by navArgs()
 
     private var currentPeriodo = 1
     private lateinit var adapter: SubjectAdapter
+    private var grado = 1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,17 +36,19 @@ class SubjectListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val grado = args.extraGrado
+        grado = arguments?.getInt("extra_grado", 1) ?: 1
 
-        // Setup tabs
         for (i in 1..4) {
             binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Período $i"))
         }
 
         adapter = SubjectAdapter(emptyList()) { subject ->
-            val action = SubjectListFragmentDirections
-                .actionSubjectListToTaskList(grado, subject, currentPeriodo)
-            findNavController().navigate(action)
+            val bundle = Bundle().apply {
+                putInt("extra_grado", grado)
+                putString("extra_asignatura", subject)
+                putInt("extra_periodo", currentPeriodo)
+            }
+            findNavController().navigate(R.id.action_subjectList_to_taskList, bundle)
         }
 
         binding.rvSubjects.layoutManager = LinearLayoutManager(requireContext())
