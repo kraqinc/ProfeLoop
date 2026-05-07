@@ -1,41 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#5C6BC0</color>
-    <color name="colorPrimaryDark">#3949AB</color>
-    <color name="colorPrimaryLight">#9FA8DA</color>
-    <color name="colorSecondary">#FF7043</color>
-    <color name="colorBackground">#F0F2FF</color>
-    <color name="colorSurface">#FFFFFF</color>
-    <color name="colorOnPrimary">#FFFFFF</color>
-    <color name="colorOnSurface">#212121</color>
-    <color name="colorOnSurfaceVariant">#757575</color>
-    <color name="colorDivider">#E0E0E0</color>
-    <color name="colorWhite">#FFFFFF</color>
-    <color name="colorError">#D32F2F</color>
+    <!-- Material 3 Color Scheme - School Purple/Blue Theme -->
+    <color name="md_theme_primary">#5C6BC0</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#E8EAF6</color>
+    <color name="md_theme_onPrimaryContainer">#1A237E</color>
 
-    <!-- Grade colors -->
-    <color name="grade1">#EF5350</color>
-    <color name="grade2">#EC407A</color>
-    <color name="grade3">#AB47BC</color>
-    <color name="grade4">#7E57C2</color>
-    <color name="grade5">#5C6BC0</color>
-    <color name="grade6">#42A5F5</color>
-    <color name="grade7">#26A69A</color>
-    <color name="grade8">#66BB6A</color>
-    <color name="grade9">#FF7043</color>
+    <color name="md_theme_secondary">#7C4DFF</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#EDE7F6</color>
+    <color name="md_theme_onSecondaryContainer">#311B92</color>
 
-    <!-- Status colors -->
-    <color name="statusPending">#FFA726</color>
-    <color name="statusSubmitted">#42A5F5</color>
-    <color name="statusGraded">#66BB6A</color>
-    <color name="statusLate">#EF5350</color>
+    <color name="md_theme_tertiary">#00BCD4</color>
+    <color name="md_theme_onTertiary">#FFFFFF</color>
+    <color name="md_theme_tertiaryContainer">#E0F7FA</color>
+    <color name="md_theme_onTertiaryContainer">#006064</color>
 
-    <!-- Urgency colors -->
-    <color name="urgencyGreen">#4CAF50</color>
-    <color name="urgencyYellow">#FFC107</color>
-    <color name="urgencyOrange">#FF9800</color>
-    <color name="urgencyRed">#F44336</color>
+    <color name="md_theme_error">#F44336</color>
+    <color name="md_theme_onError">#FFFFFF</color>
+    <color name="md_theme_errorContainer">#FFEBEE</color>
+    <color name="md_theme_onErrorContainer">#B71C1C</color>
 
-    <!-- Chat bubble -->
-    <color name="chatBubbleAssistant">#EEEEEE</color>
+    <color name="md_theme_background">#F5F5F5</color>
+    <color name="md_theme_onBackground">#212121</color>
+
+    <color name="md_theme_surface">#FFFFFF</color>
+    <color name="md_theme_onSurface">#212121</color>
+    <color name="md_theme_surfaceVariant">#EEEEEE</color>
+    <color name="md_theme_onSurfaceVariant">#757575</color>
+
+    <color name="md_theme_outline">#9E9E9E</color>
+    <color name="md_theme_outlineVariant">#E0E0E0</color>
+
+    <!-- Premium Modern Gradients -->
+    <color name="gradient_start">#6366F1</color>
+    <color name="gradient_end">#A855F7</color>
+    <color name="gradient_2_start">#06B6D4</color>
+    <color name="gradient_2_end">#3B82F6</color>
+    <color name="gradient_3_start">#F43F5E</color>
+    <color name="gradient_3_end">#FB923C</color>
+
+    <!-- Glassmorphism -->
+    <color name="glass_white_high">#B3FFFFFF</color>
+    <color name="glass_white_medium">#80FFFFFF</color>
+    <color name="glass_white_low">#33FFFFFF</color>
+    <color name="glass_black_low">#1A000000</color>
+
+    <!-- Card Backgrounds -->
+    <color name="card_bg_light">#FFFFFF</color>
+    <color name="card_bg_premium">#FDFDFF</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary">#1E293B</color>
+    <color name="text_secondary">#64748B</color>
+    <color name="text_hint">#94A3B8</color>
+
+    <!-- Grade Colors -->
+    <color name="grade_1">#FF6B6B</color>
+    <color name="grade_2">#FF8E53</color>
+    <color name="grade_3">#FFC947</color>
+    <color name="grade_4">#47D16C</color>
+    <color name="grade_5">#4ECDC4</color>
+    <color name="grade_6">#45B7D1</color>
+    <color name="grade_7">#5C6BC0</color>
+    <color name="grade_8">#AB47BC</color>
+    <color name="grade_9">#EC407A</color>
+
+    <!-- Status Colors -->
+    <color name="status_enviada">#2196F3</color>
+    <color name="status_revisando">#FF9800</color>
+    <color name="status_calificada">#4CAF50</color>
+
+    <!-- Bottom Nav -->
+    <color name="bottom_nav_selected">@color/md_theme_primary</color>
+    <color name="bottom_nav_unselected">@color/md_theme_onSurfaceVariant</color>
 </resources>
