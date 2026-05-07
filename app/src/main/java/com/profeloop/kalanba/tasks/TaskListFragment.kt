@@ -7,10 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.profeloop.kalanba.databinding.FragmentTaskListBinding
-import com.profeloop.kalanba.models.Task
 import com.profeloop.kalanba.utils.Constants
 import com.profeloop.kalanba.utils.FirebaseUtils
 import kotlinx.coroutines.launch
@@ -19,10 +17,12 @@ class TaskListFragment : Fragment() {
 
     private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
-    private val args: TaskListFragmentArgs by navArgs()
+
+    private var grado = 1
+    private var asignatura = ""
+    private var periodo = 1
 
     private lateinit var adapter: TaskAdapter
-    private var currentUser: com.profeloop.kalanba.models.User? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,6 +35,10 @@ class TaskListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        grado = arguments?.getInt("extra_grado", 1) ?: 1
+        asignatura = arguments?.getString("extra_asignatura", "") ?: ""
+        periodo = arguments?.getInt("extra_periodo", 1) ?: 1
 
         adapter = TaskAdapter(emptyList()) { task ->
             val intent = Intent(requireContext(), TaskDetailActivity::class.java).apply {
@@ -56,8 +60,8 @@ class TaskListFragment : Fragment() {
 
         lifecycleScope.launch {
             val uid = FirebaseUtils.currentUid ?: return@launch
-            currentUser = FirebaseUtils.getUserProfile(uid)
-            if (currentUser?.rol == Constants.ROL_PROFESOR) {
+            val user = FirebaseUtils.getUserProfile(uid)
+            if (user?.rol == Constants.ROL_PROFESOR) {
                 binding.fabPublish.visibility = View.VISIBLE
             }
             loadTasks()
@@ -65,8 +69,8 @@ class TaskListFragment : Fragment() {
 
         binding.fabPublish.setOnClickListener {
             val intent = Intent(requireContext(), PublishTaskActivity::class.java).apply {
-                putExtra(PublishTaskActivity.EXTRA_GRADO, args.extraGrado)
-                putExtra(PublishTaskActivity.EXTRA_ASIGNATURA, args.extraAsignatura)
+                putExtra(PublishTaskActivity.EXTRA_GRADO, grado)
+                putExtra(PublishTaskActivity.EXTRA_ASIGNATURA, asignatura)
             }
             startActivity(intent)
         }
@@ -75,7 +79,7 @@ class TaskListFragment : Fragment() {
     private fun loadTasks() {
         lifecycleScope.launch {
             binding.swipeRefresh.isRefreshing = true
-            val tasks = FirebaseUtils.getTasks(args.extraGrado, args.extraAsignatura, args.extraPeriodo)
+            val tasks = FirebaseUtils.getTasks(grado, asignatura, periodo)
             adapter.updateData(tasks)
             binding.swipeRefresh.isRefreshing = false
             if (tasks.isEmpty()) {
