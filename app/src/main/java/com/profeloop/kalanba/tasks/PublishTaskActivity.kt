@@ -1,221 +1,177 @@
 package com.profeloop.kalanba.tasks
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
+import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.google.firebase.firestore.FieldValue
 import com.profeloop.kalanba.databinding.ActivityPublishTaskBinding
+import com.profeloop.kalanba.models.AppNotification
 import com.profeloop.kalanba.models.Task
-import com.profeloop.kalanba.models.User
 import com.profeloop.kalanba.utils.Constants
 import com.profeloop.kalanba.utils.FirebaseUtils
-import com.profeloop.kalanba.utils.gone
-import com.profeloop.kalanba.utils.visible
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class PublishTaskActivity : AppCompatActivity() {
 
+    companion object {
+        const val EXTRA_GRADO = "extra_grado"
+        const val EXTRA_ASIGNATURA = "extra_asignatura"
+    }
+
     private lateinit var binding: ActivityPublishTaskBinding
-    private var fileUri: Uri? = null
-    private var fechaLimite: Long = 0L
-    private var grado: Int      = 8
-    private var asignatura: String = ""
-    private var periodo: Int    = 1
-    private lateinit var currentUser: User
+    private var selectedFileUri: Uri? = null
+    private var selectedDeadlineMs: Long = 0L
+    private val calendar = Calendar.getInstance()
+
+    private val filePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri ->
+        uri?.let {
+            selectedFileUri = it
+            val fileName = uri.lastPathSegment ?: "archivo"
+            binding.tvSelectedFile.text = fileName
+            binding.tvSelectedFile.visibility = View.VISIBLE
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPublishTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Publicar Tarea"
 
-        grado      = intent.getIntExtra(Constants.EXTRA_GRADO, 8)
-        asignatura = intent.getStringExtra(Constants.EXTRA_ASIGNATURA) ?: ""
-        periodo    = intent.getIntExtra(Constants.EXTRA_PERIODO, 1)
+        setupPeriodoSpinner()
 
-        binding.tvInfoTarea.text = "$asignatura · Grado $grado° · Período $periodo"
-
-        loadUser()
-        setupListeners()
+        binding.btnDeadline.setOnClickListener { showDatePicker() }
+        binding.btnAttachFile.setOnClickListener { filePickerLauncher.launch("*/*") }
+        binding.btnPublish.setOnClickListener { publishTask() }
     }
 
-    private fun loadUser() {
-        lifecycleScope.launch {
-            val uid  = FirebaseUtils.currentUid ?: return@launch
-            val user = FirebaseUtils.getUserProfile(uid) ?: return@launch
-            currentUser = user
-
-            // Check if subject already claimed by another teacher
-            val teacher = FirebaseUtils.getSubjectTeacher(grado, asignatura)
-            if (teacher != null && teacher.uid != uid) {
-                Toast.makeText(
-                    this@PublishTaskActivity,
-                    "Ya hay un/a profesor/a en esta asignatura",
-                    Toast.LENGTH_LONG
-                ).show()
-                finish()
-                return@launch
-            }
-
-            // If first time claiming, add subject to teacher's profile
-            if (teacher == null) {
-                val newSubjects = user.asignaturas.toMutableList()
-                if (!newSubjects.contains(asignatura)) {
-                    newSubjects.add(asignatura)
-                    FirebaseUtils.db.collection(Constants.COLLECTION_USERS)
-                        .document(uid)
-                        .update("asignaturas", newSubjects, "grado", grado)
-                        .await()
-                }
-            }
-        }
+    private fun setupPeriodoSpinner() {
+        val periodos = listOf("Período 1", "Período 2", "Período 3", "Período 4")
+        binding.spinnerPeriodo.adapter = ArrayAdapter(
+            this, android.R.layout.simple_spinner_dropdown_item, periodos
+        )
     }
 
-    private fun setupListeners() {
-        binding.btnSeleccionarArchivo.setOnClickListener {
-            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-                type = "*/*"
-                putExtra(Intent.EXTRA_MIME_TYPES, arrayOf(
-                    "application/pdf",
-                    "application/msword",
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                    "application/vnd.ms-excel",
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                ))
-            }
-            startActivityForResult(Intent.createChooser(intent, "Selecciona archivo"), REQUEST_FILE)
+    private fun showDatePicker() {
+        val listener = DatePickerDialog.OnDateSetListener { _, year, month, day ->
+            calendar.set(year, month, day)
+            calendar.set(Calendar.HOUR_OF_DAY, 23)
+            calendar.set(Calendar.MINUTE, 59)
+            selectedDeadlineMs = calendar.timeInMillis
+            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            binding.tvDeadlineSelected.text = sdf.format(Date(selectedDeadlineMs))
+            binding.tvDeadlineSelected.visibility = View.VISIBLE
+            binding.btnDeadline.text = "Fecha: ${binding.tvDeadlineSelected.text}"
         }
-
-        binding.btnFechaLimite.setOnClickListener {
-            val cal = Calendar.getInstance()
-            DatePickerDialog(
-                this,
-                { _, year, month, day ->
-                    cal.set(year, month, day, 23, 59, 0)
-                    fechaLimite = cal.timeInMillis
-                    val sdf = SimpleDateFormat("dd/MM/yyyy", Locale("es", "CO"))
-                    binding.btnFechaLimite.text = "📅 ${sdf.format(cal.time)}"
-                },
-                cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)
-            ).show()
-        }
-
-        binding.btnPublicar.setOnClickListener { publishTask() }
+        DatePickerDialog(
+            this, listener,
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).show()
     }
 
     private fun publishTask() {
-        val titulo      = binding.etTitulo.text.toString().trim()
-        val descripcion = binding.etDescripcion.text.toString().trim()
+        val title = binding.etTitle.text.toString().trim()
+        val description = binding.etDescription.text.toString().trim()
+        val periodo = binding.spinnerPeriodo.selectedItemPosition + 1
+        val grado = intent.getIntExtra(EXTRA_GRADO, 0)
+        val asignatura = intent.getStringExtra(EXTRA_ASIGNATURA) ?: ""
 
-        if (titulo.isEmpty()) {
-            binding.tilTitulo.error = "Ingresa un título"
+        if (title.isEmpty()) {
+            binding.tilTitle.error = "El título es obligatorio"
             return
         }
-        if (descripcion.isEmpty()) {
-            binding.tilDescripcion.error = "Ingresa una descripción"
-            return
-        }
-        if (fileUri == null) {
-            Toast.makeText(this, "Selecciona un archivo para la tarea", Toast.LENGTH_SHORT).show()
-            return
-        }
-        if (fechaLimite == 0L) {
-            Toast.makeText(this, "Selecciona la fecha límite", Toast.LENGTH_SHORT).show()
+        if (selectedDeadlineMs == 0L) {
+            Toast.makeText(this, "Selecciona una fecha límite", Toast.LENGTH_SHORT).show()
             return
         }
 
-        binding.tilTitulo.error     = null
-        binding.tilDescripcion.error = null
-        binding.progressBar.visible()
-        binding.btnPublicar.isEnabled = false
+        binding.progressBar.visibility = View.VISIBLE
+        binding.btnPublish.isEnabled = false
 
         lifecycleScope.launch {
             try {
-                val uid      = FirebaseUtils.currentUid ?: return@launch
-                val fileName = "tarea_${System.currentTimeMillis()}_${getFileName(fileUri!!)}"
-                val ref      = FirebaseUtils.storage.reference.child("tareas/$grado/$asignatura/$periodo/$fileName")
+                val uid = FirebaseUtils.currentUid ?: return@launch
+                val user = FirebaseUtils.getUserProfile(uid) ?: return@launch
 
-                ref.putFile(fileUri!!).await()
-                val downloadUrl = ref.downloadUrl.await().toString()
-                val extension   = getExtension(fileUri!!)
+                var fileUrl = ""
+                var fileName = ""
+                selectedFileUri?.let { uri ->
+                    fileName = uri.lastPathSegment ?: "archivo"
+                    val ref = FirebaseUtils.storage.reference
+                        .child("tasks/$uid/${System.currentTimeMillis()}/$fileName")
+                    ref.putFile(uri).await()
+                    fileUrl = ref.downloadUrl.await().toString()
+                }
 
                 val task = Task(
-                    titulo          = titulo,
-                    descripcion     = descripcion,
-                    asignatura      = asignatura,
-                    grado           = grado,
-                    periodo         = periodo,
-                    profesorUid     = uid,
-                    profesorNombre  = currentUser.nombreCompleto(),
-                    archivoUrl      = downloadUrl,
-                    archivoNombre   = fileName,
-                    archivoTipo     = extension,
-                    fechaLimite     = fechaLimite
+                    titulo = title,
+                    descripcion = description,
+                    profesorId = uid,
+                    profesorNombre = user.nombre,
+                    grado = grado,
+                    asignatura = asignatura,
+                    periodo = periodo,
+                    archivoUrl = fileUrl,
+                    archivoNombre = fileName,
+                    fechaLimite = selectedDeadlineMs,
+                    fechaCreacion = System.currentTimeMillis()
                 )
 
-                FirebaseUtils.publishTask(task)
+                val success = FirebaseUtils.publishTask(task)
+                if (success) {
+                    // Notify students of this grade
+                    val students = FirebaseUtils.db.collection(Constants.COLLECTION_USERS)
+                        .whereEqualTo("grado", grado)
+                        .whereEqualTo("rol", Constants.ROL_ESTUDIANTE)
+                        .get().await().toObjects(com.profeloop.kalanba.models.User::class.java)
 
-                binding.progressBar.gone()
-                Toast.makeText(this@PublishTaskActivity, "¡Tarea publicada exitosamente!", Toast.LENGTH_SHORT).show()
-                finish()
-
+                    for (student in students) {
+                        FirebaseUtils.sendNotification(
+                            AppNotification(
+                                titulo = "Nueva tarea publicada",
+                                mensaje = "$asignatura: $title",
+                                tipo = "new_task",
+                                timestamp = System.currentTimeMillis(),
+                                targetUserId = student.uid
+                            )
+                        )
+                    }
+                    Toast.makeText(this@PublishTaskActivity, "Tarea publicada exitosamente", Toast.LENGTH_SHORT).show()
+                    finish()
+                } else {
+                    Toast.makeText(this@PublishTaskActivity, "Error al publicar tarea", Toast.LENGTH_SHORT).show()
+                    binding.btnPublish.isEnabled = true
+                }
             } catch (e: Exception) {
-                binding.progressBar.gone()
-                binding.btnPublicar.isEnabled = true
-                Toast.makeText(this@PublishTaskActivity, "Error al publicar: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@PublishTaskActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                binding.btnPublish.isEnabled = true
             }
+            binding.progressBar.visibility = View.GONE
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_FILE && resultCode == RESULT_OK) {
-            fileUri = data?.data
-            val name = getFileName(fileUri!!)
-            binding.tvArchivoSeleccionado.text = "📎 $name"
-            binding.tvArchivoSeleccionado.visible()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+            return true
         }
-    }
-
-    private fun getFileName(uri: Uri): String {
-        val cursor = contentResolver.query(uri, null, null, null, null)
-        return cursor?.use {
-            val idx = it.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
-            it.moveToFirst()
-            if (idx >= 0) it.getString(idx) else "archivo"
-        } ?: "archivo"
-    }
-
-    private fun getExtension(uri: Uri): String {
-        val mime = contentResolver.getType(uri) ?: return "pdf"
-        return when (mime) {
-            "application/pdf" -> "pdf"
-            "application/msword",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document" -> "docx"
-            "application/vnd.ms-excel",
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" -> "xlsx"
-            else -> "pdf"
-        }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressedDispatcher.onBackPressed()
-        return true
-    }
-
-    companion object {
-        private const val REQUEST_FILE = 1002
+        return super.onOptionsItemSelected(item)
     }
 }
