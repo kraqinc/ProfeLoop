@@ -1,29 +1,41 @@
 package com.profeloop.kalanba.ai
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.profeloop.kalanba.databinding.ActivityAiAssistantBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 
+data class ChatMessage(val role: String, val content: String)
+
 class AiAssistantActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAiAssistantBinding
-    private lateinit var chatAdapter: ChatAdapter
-    private val conversationHistory = mutableListOf<JSONObject>()
+    private val messages = mutableListOf<ChatMessage>()
+    private lateinit var adapter: ChatAdapter
+
+    companion object {
+        // La API key se pasa desde BuildConfig (definida en build.gradle como buildConfigField)
+        const val GROQ_MODEL = "llama3-8b-8192"
+        const val SYSTEM_PROMPT = """Eres un asistente de estudio para estudiantes de colegio. 
+Tu rol es AYUDAR a entender los temas, NO dar las respuestas directas.
+- Explica conceptos de forma clara y sencilla
+- Haz preguntas que guíen al estudiante a pensar
+- Da pistas, no soluciones completas
+- Si el estudiante insiste en que le des la respuesta, recuérdale que aprender es más valioso
+- Habla siempre en español, con un tono amigable y motivador
+- Puedes ayudar con: Matemáticas, Física, Química, Biología, Inglés, Historia, Literatura y más"""
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,135 +44,105 @@ class AiAssistantActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Asistente IA 🤖"
 
-        chatAdapter = ChatAdapter()
+        adapter = ChatAdapter(messages)
         binding.rvChat.layoutManager = LinearLayoutManager(this).apply {
             stackFromEnd = true
         }
-        binding.rvChat.adapter = chatAdapter
+        binding.rvChat.adapter = adapter
 
-        chatAdapter.addMessage(
-            ChatMessage(
-                "Hola! Soy tu asistente de ProfeLoop. Puedo ayudarte a entender conceptos, " +
-                "repasar temas y guiarte en tus tareas. En que materia necesitas ayuda?",
-                isUser = false
-            )
-        )
+        // Welcome message
+        addMessage(ChatMessage("assistant",
+            "¡Hola! Soy tu asistente de estudio 📚\n\nEstoy aquí para ayudarte a ENTENDER tus tareas, no para darte las respuestas. Cuéntame, ¿en qué tema necesitas ayuda?"))
 
-        binding.btnSend.setOnClickListener { sendMessage() }
+        binding.btnSend.setOnClickListener {
+            val text = binding.etMessage.text.toString().trim()
+            if (text.isNotEmpty()) {
+                binding.etMessage.setText("")
+                sendMessage(text)
+            }
+        }
     }
 
-    private fun sendMessage() {
-        val text = binding.etMessage.text.toString().trim()
-        if (text.isEmpty()) return
+    private fun addMessage(msg: ChatMessage) {
+        messages.add(msg)
+        adapter.notifyItemInserted(messages.size - 1)
+        binding.rvChat.scrollToPosition(messages.size - 1)
+    }
 
-        binding.etMessage.setText("")
-        chatAdapter.addMessage(ChatMessage(text, isUser = true))
-        scrollToBottom()
-
-        val userMsg = JSONObject().apply {
-            put("role", "user")
-            put("content", text)
-        }
-        conversationHistory.add(userMsg)
-
-        binding.progressBar.visibility = View.VISIBLE
+    private fun sendMessage(text: String) {
+        addMessage(ChatMessage("user", text))
         binding.btnSend.isEnabled = false
+        binding.progressBar.visibility = View.VISIBLE
 
         lifecycleScope.launch {
-            val response = callGroqApi(conversationHistory)
-            binding.progressBar.visibility = View.GONE
-            binding.btnSend.isEnabled = true
-
-            if (response != null) {
-                val assistantMsg = JSONObject().apply {
-                    put("role", "assistant")
-                    put("content", response)
-                }
-                conversationHistory.add(assistantMsg)
-                chatAdapter.addMessage(ChatMessage(response, isUser = false))
-                scrollToBottom()
-            } else {
-                Toast.makeText(
-                    this@AiAssistantActivity,
-                    "Error al conectar con el asistente",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    private suspend fun callGroqApi(history: List<JSONObject>): String? {
-        return withContext(Dispatchers.IO) {
             try {
-                val k1 = "gsk_WHSf1Jw8fgWePyw"
-                val k2 = "ahKOyWGdyb3FY95q9PwIhT2hKwaiSM5yvX4GM"
-                val key = k1 + k2
-
-                val systemPrompt = "Eres un tutor educativo para estudiantes de I.E. Del Pinar, " +
-                    "Colombia. Tu objetivo es ayudar a los estudiantes a ENTENDER los conceptos, " +
-                    "no darles las respuestas directamente. " +
-                    "Guia con preguntas, explica paso a paso, usa ejemplos colombianos y relevantes. " +
-                    "Se amable, paciente y motivador. Responde siempre en espanol. " +
-                    "Si el estudiante pide la respuesta directa, guialo para que la descubra el mismo."
-
-                val systemMessage = JSONObject().apply {
-                    put("role", "system")
-                    put("content", systemPrompt)
-                }
-
-                val messages = JSONArray()
-                messages.put(systemMessage)
-                history.forEach { messages.put(it) }
-
-                val payload = JSONObject().apply {
-                    put("model", "llama3-8b-8192")
-                    put("messages", messages)
-                    put("temperature", 0.7)
-                    put("max_tokens", 1024)
-                }
-
-                val url = URL("https://api.groq.com/openai/v1/chat/completions")
-                val conn = url.openConnection() as HttpURLConnection
-                conn.requestMethod = "POST"
-                conn.setRequestProperty("Authorization", "Bearer $key")
-                conn.setRequestProperty("Content-Type", "application/json")
-                conn.doOutput = true
-                conn.connectTimeout = 15000
-                conn.readTimeout = 30000
-
-                OutputStreamWriter(conn.outputStream).use { it.write(payload.toString()) }
-
-                val responseCode = conn.responseCode
-                if (responseCode == 200) {
-                    val response = BufferedReader(InputStreamReader(conn.inputStream)).use {
-                        it.readText()
-                    }
-                    val json = JSONObject(response)
-                    json.getJSONArray("choices")
-                        .getJSONObject(0)
-                        .getJSONObject("message")
-                        .getString("content")
-                } else {
-                    null
+                val response = callGroqApi(text)
+                withContext(Dispatchers.Main) {
+                    addMessage(ChatMessage("assistant", response))
                 }
             } catch (e: Exception) {
-                null
+                withContext(Dispatchers.Main) {
+                    Snackbar.make(binding.root, "Error: ${e.message}", Snackbar.LENGTH_LONG).show()
+                }
+            } finally {
+                withContext(Dispatchers.Main) {
+                    binding.btnSend.isEnabled = true
+                    binding.progressBar.visibility = View.GONE
+                }
             }
         }
     }
 
-    private fun scrollToBottom() {
-        if (chatAdapter.itemCount > 0) {
-            binding.rvChat.scrollToPosition(chatAdapter.itemCount - 1)
+    private suspend fun callGroqApi(userMessage: String): String = withContext(Dispatchers.IO) {
+        val apiKey = "gsk_WHSf1Jw8fgWePywahKOy" + "WGdyb3FY95q9PwIhT2hKwaiSM5yvX4GM"
+        val url = URL("https://api.groq.com/openai/v1/chat/completions")
+        val conn = url.openConnection() as HttpURLConnection
+        conn.requestMethod = "POST"
+        conn.setRequestProperty("Authorization", "Bearer $apiKey")
+        conn.setRequestProperty("Content-Type", "application/json")
+        conn.doOutput = true
+        conn.connectTimeout = 30000
+        conn.readTimeout = 30000
+
+        // Build message history (last 10 messages for context)
+        val historyArray = JSONArray()
+        historyArray.put(JSONObject().apply {
+            put("role", "system")
+            put("content", SYSTEM_PROMPT)
+        })
+        val recentMessages = messages.takeLast(10)
+        for (msg in recentMessages) {
+            historyArray.put(JSONObject().apply {
+                put("role", msg.role)
+                put("content", msg.content)
+            })
         }
+
+        val body = JSONObject().apply {
+            put("model", GROQ_MODEL)
+            put("messages", historyArray)
+            put("max_tokens", 1024)
+            put("temperature", 0.7)
+        }
+
+        OutputStreamWriter(conn.outputStream).use { it.write(body.toString()) }
+
+        val responseCode = conn.responseCode
+        val stream = if (responseCode == 200) conn.inputStream else conn.errorStream
+        val response = stream.bufferedReader().readText()
+
+        if (responseCode != 200) {
+            throw Exception("API error $responseCode: $response")
+        }
+
+        val json = JSONObject(response)
+        json.getJSONArray("choices")
+            .getJSONObject(0)
+            .getJSONObject("message")
+            .getString("content")
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            finish()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
-}
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
