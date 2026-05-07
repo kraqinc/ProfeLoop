@@ -3,70 +3,62 @@ package com.profeloop.kalanba.tasks
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.profeloop.kalanba.databinding.ItemTaskBinding
 import com.profeloop.kalanba.models.Task
-import com.profeloop.kalanba.utils.toDateOnly
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class TaskAdapter(
-    private val isProfesor: Boolean,
-    private val onTaskClick: (Task) -> Unit
-) : ListAdapter<Task, TaskAdapter.ViewHolder>(DIFF_CALLBACK) {
+    private var tasks: List<Task>,
+    private val onClick: (Task) -> Unit
+) : RecyclerView.Adapter<TaskAdapter.ViewHolder>() {
 
-    companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Task>() {
-            override fun areItemsTheSame(a: Task, b: Task) = a.id == b.id
-            override fun areContentsTheSame(a: Task, b: Task) = a == b
-        }
+    fun updateData(newTasks: List<Task>) {
+        tasks = newTasks
+        notifyDataSetChanged()
     }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(tasks[position])
+    }
+
+    override fun getItemCount() = tasks.size
 
     inner class ViewHolder(private val binding: ItemTaskBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(task: Task) {
-            binding.tvTaskTitle.text    = task.titulo
-            binding.tvProfesor.text     = "Prof. ${task.profesorNombre}"
-            binding.tvFechaLimite.text  = "Entrega: ${task.fechaLimite.toDateOnly()}"
+            binding.tvTitle.text = task.titulo
+            binding.tvProfessor.text = "Por: ${task.profesorNombre}"
 
-            val fileIcon = when (task.archivoTipo.lowercase()) {
-                "pdf"  -> "📄"
-                "docx", "doc" -> "📝"
-                "xlsx", "xls" -> "📊"
-                else   -> "📎"
-            }
-            binding.tvArchivoTipo.text = "$fileIcon ${task.archivoNombre}"
+            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val deadlineDate = Date(task.fechaLimite)
+            binding.tvDeadline.text = "Límite: ${sdf.format(deadlineDate)}"
 
-            // Color urgency indicator
-            val daysLeft = TimeUnit.MILLISECONDS.toDays(task.fechaLimite - System.currentTimeMillis())
-            val urgencyColor = when {
-                daysLeft < 0  -> Color.parseColor("#F44336") // Vencida
-                daysLeft <= 2 -> Color.parseColor("#FF9800") // Urgente
-                daysLeft <= 7 -> Color.parseColor("#FFC107") // Pronto
-                else          -> Color.parseColor("#4CAF50") // Normal
-            }
-            binding.urgencyBar.setBackgroundColor(urgencyColor)
+            val urgencyColor = getUrgencyColor(task.fechaLimite)
+            binding.urgencyBar.setBackgroundColor(Color.parseColor(urgencyColor))
 
-            val daysText = when {
-                daysLeft < 0  -> "Vencida"
-                daysLeft == 0L -> "¡Vence hoy!"
-                daysLeft == 1L -> "Vence mañana"
-                else           -> "Faltan $daysLeft días"
-            }
-            binding.tvDaysLeft.text  = daysText
-            binding.tvDaysLeft.setTextColor(urgencyColor)
-
-            binding.root.setOnClickListener { onTaskClick(task) }
+            binding.root.setOnClickListener { onClick(task) }
         }
-    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    )
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        private fun getUrgencyColor(fechaLimite: Long): String {
+            val now = System.currentTimeMillis()
+            val diff = fechaLimite - now
+            val days = TimeUnit.MILLISECONDS.toDays(diff)
+            return when {
+                diff < 0 -> "#F44336"      // urgencyRed - past deadline
+                days <= 2 -> "#FF9800"     // urgencyOrange - 2 days or less
+                days <= 5 -> "#FFC107"     // urgencyYellow - 5 days or less
+                else -> "#4CAF50"          // urgencyGreen - plenty of time
+            }
+        }
     }
 }
