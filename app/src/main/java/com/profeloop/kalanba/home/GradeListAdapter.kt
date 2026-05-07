@@ -1,88 +1,65 @@
 package com.profeloop.kalanba.home
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.profeloop.kalanba.databinding.ItemGradeBinding
 import com.profeloop.kalanba.databinding.ItemSectionHeaderBinding
-import com.profeloop.kalanba.models.GradeSection
-
-sealed class GradeItem {
-    data class Header(val title: String) : GradeItem()
-    data class GradeCard(val grado: Int)  : GradeItem()
-}
+import com.profeloop.kalanba.utils.Constants
 
 class GradeListAdapter(
+    private val items: List<Any>,
     private val onGradeClick: (Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val items = mutableListOf<GradeItem>()
-
     companion object {
-        private const val VIEW_TYPE_HEADER = 0
-        private const val VIEW_TYPE_GRADE  = 1
-
-        private val GRADE_COLORS = mapOf(
-            1 to "#FF6B6B", 2 to "#FF8E53", 3 to "#FFC947",
-            4 to "#47D16C", 5 to "#4ECDC4", 6 to "#45B7D1",
-            7 to "#5C6BC0", 8 to "#AB47BC", 9 to "#EC407A"
-        )
+        private const val TYPE_HEADER = 0
+        private const val TYPE_GRADE = 1
     }
 
-    fun submitSections(sections: List<GradeSection>) {
-        items.clear()
-        for (section in sections) {
-            items.add(GradeItem.Header(section.name))
-            section.grades.forEach { items.add(GradeItem.GradeCard(it)) }
-        }
-        notifyDataSetChanged()
-    }
-
-    override fun getItemViewType(position: Int) = when (items[position]) {
-        is GradeItem.Header    -> VIEW_TYPE_HEADER
-        is GradeItem.GradeCard -> VIEW_TYPE_GRADE
+    override fun getItemViewType(position: Int): Int {
+        return if (items[position] is String) TYPE_HEADER else TYPE_GRADE
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return when (viewType) {
-            VIEW_TYPE_HEADER -> HeaderViewHolder(
-                ItemSectionHeaderBinding.inflate(inflater, parent, false)
+        return if (viewType == TYPE_HEADER) {
+            val binding = ItemSectionHeaderBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
             )
-            else -> GradeViewHolder(
-                ItemGradeBinding.inflate(inflater, parent, false)
+            HeaderViewHolder(binding)
+        } else {
+            val binding = ItemGradeBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
             )
+            GradeViewHolder(binding)
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (val item = items[position]) {
-            is GradeItem.Header    -> (holder as HeaderViewHolder).bind(item.title)
-            is GradeItem.GradeCard -> (holder as GradeViewHolder).bind(item.grado)
+        when (holder) {
+            is HeaderViewHolder -> holder.bind(items[position] as String)
+            is GradeViewHolder -> holder.bind(items[position] as Int)
         }
     }
 
     override fun getItemCount() = items.size
 
-    inner class HeaderViewHolder(
-        private val binding: ItemSectionHeaderBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+    inner class HeaderViewHolder(private val binding: ItemSectionHeaderBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(title: String) {
-            binding.tvSectionTitle.text = title
+            binding.root.text = title
         }
     }
 
-    inner class GradeViewHolder(
-        private val binding: ItemGradeBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(grado: Int) {
-            binding.tvGrado.text   = "$grado°"
-            binding.tvLabel.text   = "Grado $grado"
-            val colorStr = GRADE_COLORS[grado] ?: "#5C6BC0"
-            binding.cardGrade.setCardBackgroundColor(
-                android.graphics.Color.parseColor(colorStr)
-            )
-            binding.root.setOnClickListener { onGradeClick(grado) }
+    inner class GradeViewHolder(private val binding: ItemGradeBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(grade: Int) {
+            binding.tvGradeNumber.text = grade.toString()
+            binding.tvGradeLabel.text = "Grado $grade"
+            val colorHex = Constants.GRADE_COLORS[grade - 1]
+            binding.gradeCircle.background.setTint(Color.parseColor(colorHex))
+            binding.root.setOnClickListener { onGradeClick(grade) }
         }
     }
 }
