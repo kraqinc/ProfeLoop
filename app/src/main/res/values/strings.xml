@@ -1,53 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ProfeLoop</string>
-    <string name="login_title">Bienvenido a ProfeLoop</string>
-    <string name="login_subtitle">I.E. Del Pinar</string>
-    <string name="email_hint">Correo electrónico</string>
-    <string name="password_hint">Contraseña</string>
-    <string name="btn_login">Iniciar sesión</string>
-    <string name="btn_login_google">Continuar con Google</string>
-    <string name="btn_register">Registrarse</string>
-    <string name="no_account">¿No tienes cuenta? Regístrate</string>
-    <string name="register_title">Crear cuenta</string>
-    <string name="name_hint">Nombre completo</string>
-    <string name="rol_label">Rol</string>
-    <string name="nivel_label">Nivel</string>
-    <string name="grado_label">Grado</string>
-    <string name="home_title">ProfeLoop</string>
-    <string name="primaria">PRIMARIA</string>
-    <string name="bachillerato">BACHILLERATO</string>
-    <string name="grade_format">Grado %d</string>
-    <string name="subjects_title">Materias</string>
-    <string name="period_tab">Período %d</string>
-    <string name="tasks_title">Tareas</string>
-    <string name="publish_task">Publicar tarea</string>
-    <string name="task_title_hint">Título de la tarea</string>
-    <string name="task_description_hint">Descripción</string>
-    <string name="deadline_label">Fecha límite</string>
-    <string name="select_deadline">Seleccionar fecha límite</string>
-    <string name="attach_file">Adjuntar archivo</string>
-    <string name="btn_publish">Publicar</string>
-    <string name="task_detail_title">Detalle de tarea</string>
-    <string name="submit_task">Entregar tarea</string>
-    <string name="submissions_title">Entregas</string>
-    <string name="no_submissions">Sin entregas aún</string>
-    <string name="notifications_title">Notificaciones</string>
-    <string name="no_notifications">No tienes notificaciones</string>
-    <string name="profile_title">Mi perfil</string>
-    <string name="logout">Cerrar sesión</string>
-    <string name="ai_title">Asistente IA</string>
-    <string name="ai_hint">Escribe tu pregunta...</string>
-    <string name="empty_tasks">No hay tareas publicadas</string>
-    <string name="periodo_label">Período</string>
-    <string name="by_professor">Por: %s</string>
-    <string name="deadline_format">Límite: %s</string>
-    <string name="file_attached">Archivo adjunto</string>
-    <string name="download_file">Descargar archivo</string>
-    <string name="grade_note_hint">Nota (ej: 4.5)</string>
-    <string name="comment_hint">Comentario para el estudiante</string>
-    <string name="btn_grade">Calificar</string>
-    <string name="no_file">Sin archivo</string>
-    <string name="teacher_label">Profesor: %s</string>
-    <string name="no_teacher">Sin profesor asignado</string>
+    <string name="app_name">TareaApp</string>
+    <string name="app_subtitle">I.E. Del Pinar</string>
+
+    <!-- Auth -->
+    <string name="hint_email">Correo electrónico</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="btn_login">Iniciar Sesión</string>
+    <string name="btn_register">Crear Cuenta</string>
+    <string name="link_register">¿No tienes cuenta? Regístrate aquí</string>
+    <string name="link_login">¿Ya tienes cuenta? Inicia sesión</string>
+
+    <!-- Home -->
+    <string name="title_primaria">Primaria</string>
+    <string name="title_bachillerato">Bachillerato</string>
+    <string name="hint_select_grade">Selecciona un grado</string>
+
+    <!-- Subjects -->
+    <string name="asig_quimica">Química</string>
+    <string name="asig_biologia">Biología</string>
+    <string name="asig_comprension">Comprensión Lectora</string>
+    <string name="asig_matematicas">Matemáticas</string>
+    <string name="asig_ingles">Inglés</string>
+    <string name="asig_estadistica">Estadística</string>
+    <string name="asig_emprendimiento">Emprendimiento</string>
+    <string name="asig_informatica">Informática</string>
+    <string name="asig_fisica">Física</string>
+    <string name="asig_etica">Ética</string>
+    <string name="asig_religion">Religión</string>
+    <string name="asig_geometria">Geometría</string>
+    <string name="asig_competencias">Competencias Ciudadanas</string>
+    <string name="asig_lenguaje">Lenguaje</string>
+    <string name="asig_sociales">Sociales</string>
+    <string name="asig_artistica">Artística</string>
+    <string name="asig_ed_fisica">Educación Física</string>
+
+    <!-- Tasks -->
+    <string name="title_publish_task">Publicar Tarea</string>
+    <string name="title_task_detail">Detalle de Tarea</string>
+    <string name="btn_publish">Publicar Tarea</string>
+    <string name="btn_submit">Enviar Tarea</string>
+    <string name="btn_download">Descargar</string>
+    <string name="no_tasks">No hay tareas en este período</string>
+    <string name="already_teacher">Ya hay un/a profesor/a en esta asignatura</string>
+
+    <!-- Notifications -->
+    <string name="notif_channel_name">TareaApp Notificaciones</string>
+    <string name="notif_tarea_enviada_title">Nueva entrega recibida</string>
+    <string name="notif_revisando_title">Tu tarea está siendo revisada</string>
+    <string name="notif_calificada_title">¡Tu tarea fue calificada!</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Inicio</string>
+    <string name="nav_notifications">Notificaciones</string>
+    <string name="nav_profile">Perfil</string>
+
+    <!-- Menu -->
+    <string name="menu_logout">Cerrar sesión</string>
 </resources>
